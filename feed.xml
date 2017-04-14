@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[atfzl-blog]]></title><description><![CDATA[atfzl-blog]]></description><link>http://atfzl.com</link><generator>RSS for Node</generator><lastBuildDate>Fri, 14 Apr 2017 11:11:51 GMT</lastBuildDate><atom:link href="http://atfzl.com/feed.xml" rel="self" type="application/rss+xml"/><item><title><![CDATA[Using flow and eslint in Emacs]]></title><description><![CDATA[<pre><code class="hljs language-lisp">(<span class="hljs-name">require</span> 'company)
+(<span class="hljs-name">require</span> 'web-mode)
+(<span class="hljs-name">require</span> 'flycheck)
+(<span class="hljs-name">require</span> 'flycheck-flow)
+
+<span class="hljs-comment">;; flow auto complete</span>
+<span class="hljs-comment">;; skip this if you don't use company-mode</span>
+(<span class="hljs-name">eval-after-load</span> 'company
+  '(add-to-list 'company-backends 'company-flow))
+
+<span class="hljs-comment">;; add eslint and flow checkers to flycheck</span>
+(<span class="hljs-name">flycheck-add-mode</span> 'javascript-eslint 'web-mode)
+(<span class="hljs-name">flycheck-add-mode</span> 'javascript-flow 'web-mode)
+
+<span class="hljs-comment">;;disable jshint since we prefer eslint checking</span>
+(<span class="hljs-name">setq-default</span> flycheck-disabled-checkers
+  (<span class="hljs-name">append</span> flycheck-disabled-checkers
+    '(javascript-jshint)))
+
+(<span class="hljs-name">defun</span> jsWithEslint ()
+  <span class="hljs-string">"eslint for js files"</span>
+  (<span class="hljs-name">interactive</span>)
+  (<span class="hljs-name">web-mode</span>)
+  (<span class="hljs-name">web-mode-set-content-type</span> <span class="hljs-string">"jsx"</span>)
+  (<span class="hljs-name">flycheck-disable-checker</span> 'javascript-flow)
+  (<span class="hljs-name">flycheck-select-checker</span> 'javascript-eslint)
+  (<span class="hljs-name">flycheck-mode</span>))
+
+(<span class="hljs-name">defun</span> jsWithEslintFlow ()
+  <span class="hljs-string">"flow and eslint for js files"</span>
+  (<span class="hljs-name">interactive</span>)
+  (<span class="hljs-name">web-mode</span>)
+  (<span class="hljs-name">web-mode-set-content-type</span> <span class="hljs-string">"jsx"</span>)
+  (<span class="hljs-name">flycheck-select-checker</span> 'javascript-eslint)
+  (<span class="hljs-name">flycheck-add-next-checker</span> 'javascript-eslint 'javascript-flow)
+  (<span class="hljs-name">flycheck-mode</span>))
+
+<span class="hljs-comment">;; set key shortcuts if you want</span>
+<span class="hljs-comment">;; (global-set-key (kbd "C-c j") 'jsWithEslint)</span>
+<span class="hljs-comment">;; (global-set-key (kbd "C-c f") 'jsWithEslintFlow)</span>
+
+(<span class="hljs-name">add-to-list</span> 'auto-mode-alist '(<span class="hljs-string">"\\.js\\'"</span>      . jsWithEslint))
+(<span class="hljs-name">add-to-list</span> 'magic-mode-alist '(<span class="hljs-string">"/\\* @flow \\*/"</span> . jsWithEslintFlow))</code></pre>
+<p>Now all the .js files will use eslint.<br>
+But if you have /* @flow */ comment at the first line, flow will also be used.</p>
+<p>To use local eslint and flow-bin from your node_modules, check out this package: <a href="https://github.com/codesuki/add-node-modules-path">add-node-modules-path</a>.</p>
+]]></description><link>http://atfzl.com/posts/using-flow-and-eslint-in-emacs/</link><guid isPermaLink="true">http://atfzl.com/posts/using-flow-and-eslint-in-emacs/</guid><dc:creator><![CDATA[Atif Afzal]]></dc:creator><pubDate>Sun, 06 Nov 2016 11:38:24 GMT</pubDate></item></channel></rss>
